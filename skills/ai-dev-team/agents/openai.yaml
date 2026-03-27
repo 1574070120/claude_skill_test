@@ -1,0 +1,7 @@
+interface:
+  display_name: "AI Dev Team"
+  short_description: "Create AI dev teams and coordinate parallel work"
+  default_prompt: "Use $ai-dev-team to create a small project team, assign executable tasks, and coordinate delivery."
+
+policy:
+  allow_implicit_invocation: true
