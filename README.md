@@ -1,5 +1,7 @@
 # Claude Skill Test
 
+English README: [README.en.md](README.en.md)
+
 这个仓库用于存放和发布可复用的 Claude / Agent 技能包。
 
 当前已整理并发布的技能：
@@ -75,10 +77,23 @@ python3 skills/ai-dev-team/scripts/suggest_team_setup.py /path/to/project
 python3 skills/ai-dev-team/scripts/generate_team_examples.py --project-path /path/to/project
 ```
 
+6. 如果想直接输出到文件，可以运行：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py --project-path /path/to/project --output ./examples/team-workflow.json
+```
+
+7. 如果想输出为 Markdown 交接文档，可以运行：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py --project-path /path/to/project --format markdown --output ./examples/team-workflow.md
+```
+
 ## 文档
 
 详细安装方式、调用步骤、脚本说明、单项目 / 多项目示例见：
 
+- [README.en.md](README.en.md)
 - [docs/ai-dev-team-usage.md](docs/ai-dev-team-usage.md)
 - [docs/ai-dev-team-usage.en.md](docs/ai-dev-team-usage.en.md)
 

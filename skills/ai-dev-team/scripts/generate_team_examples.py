@@ -5,6 +5,8 @@ Generate example JSON payloads for ai-dev-team workflows.
 Usage:
     python3 scripts/generate_team_examples.py --project-path /abs/path
     python3 scripts/generate_team_examples.py --project-path /abs/path --roles developer reviewer
+    python3 scripts/generate_team_examples.py --project-path /abs/path --output ./examples/team.json
+    python3 scripts/generate_team_examples.py --project-path /abs/path --format markdown --output ./examples/team.md
 """
 
 from __future__ import annotations
@@ -12,6 +14,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 from typing import Any
 
 from render_role_prompt import TEMPLATES, render_prompt
@@ -84,21 +87,110 @@ def message_examples(team_name: str, primary_role: str) -> dict[str, dict[str, A
     }
 
 
+def dump_json(data: Any) -> str:
+    return json.dumps(data, ensure_ascii=False, indent=2)
+
+
+def render_markdown(output: dict[str, Any]) -> str:
+    sections = [
+        "# ai-dev-team Workflow Examples",
+        "",
+        f"- Project: `{output['project_name']}`",
+        f"- Project Path: `{output['project_path']}`",
+        f"- Team Name: `{output['team_name']}`",
+        f"- Roles: `{', '.join(output['roles'])}`",
+        "",
+        "## TeamCreate",
+        "",
+        "```json",
+        dump_json(output["team_create"]),
+        "```",
+        "",
+        "## Spawn Teammates with Agent",
+        "",
+        "```json",
+        dump_json(output["teammates"]["spawn_with_agent_tool"]),
+        "```",
+        "",
+        "## Spawn Teammates with Task",
+        "",
+        "```json",
+        dump_json(output["teammates"]["spawn_with_task_tool"]),
+        "```",
+        "",
+        "## Starter Tasks",
+        "",
+        "```json",
+        dump_json(output["starter_tasks"]),
+        "```",
+        "",
+        "## Messages",
+        "",
+        "```json",
+        dump_json(output["messages"]),
+        "```",
+        "",
+    ]
+    return "\n".join(sections)
+
+
+def infer_format(explicit_format: str | None, output_path: str | None) -> str:
+    if explicit_format in {"json", "markdown"}:
+        return explicit_format
+    if explicit_format == "md":
+        return "markdown"
+    if output_path:
+        suffix = Path(output_path).suffix.lower()
+        if suffix in {".md", ".markdown"}:
+            return "markdown"
+    return "json"
+
+
+def render_output(output: dict[str, Any], output_format: str) -> str:
+    if output_format == "markdown":
+        return render_markdown(output)
+    return dump_json(output)
+
+
+def write_output(content: str, output_path: str | None) -> None:
+    if not output_path:
+        sys.stdout.write(content + ("\n" if not content.endswith("\n") else ""))
+        return
+
+    destination = Path(output_path).expanduser()
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    destination.write_text(content + ("\n" if not content.endswith("\n") else ""))
+    sys.stdout.write(f"Wrote {destination}\n")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate ai-dev-team example payloads.")
     parser.add_argument("--project-path", required=True, help="Absolute project directory")
     parser.add_argument("--project-name", help="Override project name")
     parser.add_argument("--team-name", help="Override team name")
     parser.add_argument(
+        "--output",
+        help="Optional output file path. If omitted, prints to stdout.",
+    )
+    parser.add_argument(
+        "--format",
+        choices=["json", "markdown", "md"],
+        help="Optional output format. Defaults to json, or infers markdown from .md output files.",
+    )
+    parser.add_argument(
         "--roles",
-        nargs="*",
+        nargs="+",
         choices=sorted(TEMPLATES.keys()),
         help="Optional explicit role list. Defaults to suggested roles for the project.",
     )
     args = parser.parse_args()
 
-    project_path = str(Path(args.project_path).expanduser().resolve())
-    spec = build_team_spec(Path(project_path))
+    project_dir = Path(args.project_path).expanduser().resolve()
+    if not project_dir.exists() or not project_dir.is_dir():
+        raise SystemExit(f"Project path not found or not a directory: {args.project_path}")
+
+    project_path = str(project_dir)
+    spec = build_team_spec(project_dir)
     project_name = args.project_name or spec["project_name"]
     team_name = args.team_name or spec["team_name"]
     roles = args.roles or [role["name"] for role in spec["roles"]]
@@ -126,7 +218,8 @@ def main() -> None:
         "messages": message_examples(team_name, roles[0]),
     }
 
-    print(json.dumps(output, ensure_ascii=False, indent=2))
+    output_format = infer_format(args.format, args.output)
+    write_output(render_output(output, output_format), args.output)
 
 
 if __name__ == "__main__":

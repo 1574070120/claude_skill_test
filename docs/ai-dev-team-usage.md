@@ -305,6 +305,30 @@ python3 skills/ai-dev-team/scripts/generate_team_examples.py \
   --roles developer reviewer tester
 ```
 
+如果你想直接写入文件：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util \
+  --output ./examples/create-data-util-team.json
+```
+
+如果你想输出成 Markdown 交接文档：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util \
+  --format markdown \
+  --output ./examples/create-data-util-team.md
+```
+
+说明：
+
+- 默认输出为格式化 JSON，并打印到 stdout
+- `--output` 可直接写入文件
+- `--format markdown` 可生成适合交接或归档的 Markdown 文档
+- 如果 `--output` 以 `.md` 结尾，且未显式传 `--format`，会自动按 Markdown 输出
+
 ## 9. 参考文件说明
 
 ### `references/role-prompts.md`

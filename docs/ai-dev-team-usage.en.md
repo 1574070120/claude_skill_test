@@ -106,7 +106,7 @@ python3 skills/ai-dev-team/scripts/render_role_prompt.py \
 
 The output is ready to use as the `prompt` field when spawning a teammate.
 
-### 3. Generate end-to-end JSON examples
+### 3. Generate workflow examples
 
 Example:
 
@@ -125,6 +125,23 @@ This returns example payloads for:
 - `shutdown_request`
 
 Use it when you want a quick scaffold instead of writing JSON by hand.
+
+To write the result to a file:
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util \
+  --output ./examples/create-data-util-team.json
+```
+
+To generate a Markdown handoff document instead:
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util \
+  --format markdown \
+  --output ./examples/create-data-util-team.md
+```
 
 ### 4. Create the team
 
@@ -244,7 +261,14 @@ Use it when you want a lightweight inference of team topology from the project p
 
 ### `generate_team_examples.py`
 
-Use it when you want ready-made JSON examples for the full team workflow.
+Use it when you want ready-made team workflow examples.
+
+Notes:
+
+- default output is pretty JSON to stdout
+- `--output` writes the result to a file
+- `--format markdown` renders a shareable Markdown artifact
+- if `--output` ends with `.md`, Markdown is inferred automatically unless `--format` is set explicitly
 
 ## Common Mistakes
 
