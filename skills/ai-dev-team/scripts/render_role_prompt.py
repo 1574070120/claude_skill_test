@@ -135,6 +135,11 @@ TEMPLATES = {
 }
 
 
+def render_prompt(role: str, project_name: str, project_path: str) -> str:
+    template = TEMPLATES[role]
+    return template.format(project_name=project_name, project_path=project_path).rstrip()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Render a teammate startup prompt.")
     parser.add_argument("--role", required=True, choices=sorted(TEMPLATES.keys()))
@@ -142,11 +147,7 @@ def main() -> None:
     parser.add_argument("--project-path", required=True)
     args = parser.parse_args()
 
-    template = TEMPLATES[args.role]
-    sys.stdout.write(
-        template.format(project_name=args.project_name, project_path=args.project_path).rstrip()
-        + "\n"
-    )
+    sys.stdout.write(render_prompt(args.role, args.project_name, args.project_path) + "\n")
 
 
 if __name__ == "__main__":

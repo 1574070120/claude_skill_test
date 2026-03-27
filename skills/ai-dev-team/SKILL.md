@@ -81,6 +81,7 @@ Claude 不同版本里，拉起 teammate 的工具名可能不同：
 - 多项目模式下的建团与协作策略，见 `references/multi-project-mode.md`
 - 根据项目路径自动生成建议 team 拓扑和 starter tasks，可运行 `scripts/suggest_team_setup.py`
 - 根据角色、项目名、路径渲染 teammate 启动 prompt，可运行 `scripts/render_role_prompt.py`
+- 根据项目路径直接生成整套团队协作 JSON 示例，可运行 `scripts/generate_team_examples.py`
 
 ## 标准流程
 
@@ -155,6 +156,7 @@ Claude 不同版本里，拉起 teammate 的工具名可能不同：
 
 更完整的角色提示词模板见 `references/role-prompts.md`。
 如果你想直接生成 prompt 文本，可运行 `python3 scripts/render_role_prompt.py --role developer --project-name <name> --project-path <path>`。
+如果你想快速拿到 `TeamCreate`、teammate spawn、`TaskCreate`、`SendMessage`、`shutdown_request` 的整套示例，可运行 `python3 scripts/generate_team_examples.py --project-path <path>`。
 
 ### 5. 先熟悉项目，再接任务
 

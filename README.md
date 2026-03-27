@@ -30,6 +30,7 @@
 .
 ├── README.md
 ├── docs/
+│   ├── ai-dev-team-usage.en.md
 │   └── ai-dev-team-usage.md
 └── skills/
     └── ai-dev-team/
@@ -41,6 +42,7 @@
         │   ├── role-prompts.md
         │   └── tool-shapes.md
         └── scripts/
+            ├── generate_team_examples.py
             ├── render_role_prompt.py
             └── suggest_team_setup.py
 ```
@@ -67,11 +69,18 @@ python3 ~/.codex/skills/.system/skill-creator/scripts/quick_validate.py ~/.agent
 python3 skills/ai-dev-team/scripts/suggest_team_setup.py /path/to/project
 ```
 
+5. 如果想直接生成整套团队协作 JSON 示例，可以运行：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py --project-path /path/to/project
+```
+
 ## 文档
 
 详细安装方式、调用步骤、脚本说明、单项目 / 多项目示例见：
 
 - [docs/ai-dev-team-usage.md](docs/ai-dev-team-usage.md)
+- [docs/ai-dev-team-usage.en.md](docs/ai-dev-team-usage.en.md)
 
 ## 适用人群
 

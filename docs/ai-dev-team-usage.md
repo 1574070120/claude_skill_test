@@ -282,6 +282,29 @@ python3 skills/ai-dev-team/scripts/render_role_prompt.py \
 
 适合拿来直接填 teammate spawn 的 `prompt` 字段。
 
+### `generate_team_examples.py`
+
+用途：
+
+- 直接生成一套可参考的团队协作 JSON 负载
+- 覆盖 `TeamCreate`、`Agent`、`Task`、`TaskCreate`、`SendMessage`、`shutdown_request`
+- 适合快速起草 workflow，而不是手写每一段 JSON
+
+示例：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util
+```
+
+如果你已经明确想用哪些角色，也可以显式指定：
+
+```bash
+python3 skills/ai-dev-team/scripts/generate_team_examples.py \
+  --project-path /Users/liliguo/IdeaProjects/create_data_util \
+  --roles developer reviewer tester
+```
+
 ## 9. 参考文件说明
 
 ### `references/role-prompts.md`
